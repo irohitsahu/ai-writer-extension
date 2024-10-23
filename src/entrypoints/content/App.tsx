@@ -1,16 +1,12 @@
-import { useState } from "react";
-import LinkedInAiLogo from "@/assets/linkedin-ai-icon.svg";
+import Modal from "@/components/Modal/Modal";
+import GenerationButton from "@/components/Button/GenerationButton";
 
 const App = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
-    <button
-      onClick={() => setIsModalOpen(true)}
-      className="p-2 hover:bg-gray-100 rounded-full"
-    >
-      <img src={LinkedInAiLogo} alt="ai-logo" />
-    </button>
+    <>
+      <GenerationButton />
+      <Modal />
+    </>
   );
 };
 

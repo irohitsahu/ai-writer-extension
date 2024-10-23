@@ -2,7 +2,11 @@
 export default {
   content: ["src/**/*.{ts,tsx,html}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        inter: ["Inter"],
+      },
+    },
   },
   plugins: [],
 };

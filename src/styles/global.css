@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: Inter;
+    src: url("../public/assets/fonts/Inter-VariableFont.ttf") format("truetype");
+  }
+}
+
+:root {
+  --primary-accent: #3b82f6;
+  --primary-text-color: #a4acb9;
+  --secondary-text-color: #ffffff;
+  --tertiary-text-color: #666d80;
+  --primary-background-color: #ffffff;
+  --secondary-background-color: #f9fafb;
+  --primary-border-color: #c1c7d0;
+}
+
+body {
+  @apply font-inter;
+  color: var(--primary-text-color);
+}
+
+#linkedin-ai-writer-container {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-container {
+  width: 240px;
+  height: 480px;
+  padding: 1rem;
+}
+
+.cs-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 101;
+}
+
+.cs-modal-body {
+  min-width: 580px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: var(--secondary-background-color);
+  border-radius: 1rem;
+  padding: 1.8rem;
+}
+
+button.primary-btn {
+  background-color: var(--primary-accent);
+  color: var(--secondary-text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.6rem;
+  font-size: 14px;
+}
+
+input.primary-input {
+  border-radius: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--primary-border-color);
+  color: var(--tertiary-text-color);
+  outline-color: var(--primary-accent);
+
+  &::placeholder {
+    color: var(--primary-text-color);
+  }
+}

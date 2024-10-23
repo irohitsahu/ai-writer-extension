@@ -2,10 +2,13 @@
 // 2. remove the ui form box if focus looses
 // 3.
 
-import "@/styles/global.scss";
+import "@/styles/global.css";
 import { createRoot, Root } from "react-dom/client";
 import type { ContentScriptContext } from "wxt/client";
 import App from "@/entrypoints/content/App";
+
+import { setContentScriptContext } from "@/components/Modal/ModalPortal";
+import { UIContextProvider } from "@/context/context";
 
 type UiObject = {
   mount: () => void;
@@ -22,6 +25,8 @@ export default defineContentScript({
   async main(ctx) {
     // initial check
     setupMessageBoxListener(ctx);
+
+    setContentScriptContext(ctx);
 
     // watching for dynamic changes
     const observer = new MutationObserver(() => {
@@ -88,7 +93,11 @@ function createUi(ctx: ContentScriptContext, messageBox: Element) {
     onMount: (uiContainer) => {
       appContainer.setAttribute("id", "linkedin-ai-writer-container");
       uiContainer.appendChild(appContainer);
-      root.render(<App />);
+      root.render(
+        <UIContextProvider>
+          <App />
+        </UIContextProvider>
+      );
     },
     onRemove: () => {
       root.unmount();

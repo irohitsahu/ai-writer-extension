@@ -1,18 +1,19 @@
 import { createContext, ReactNode } from "react";
 
 interface UIContextProps {
-  isExtensionSupported: boolean;
-  setIsExtensionSupported: (value: boolean) => void;
+  isSuggestionModalVisible: boolean;
+  setIsSuggestionModalVisible: (value: boolean) => void;
 }
 
 const UIContext = createContext<UIContextProps | undefined>(undefined);
 
 export const UIContextProvider = ({ children }: { children: ReactNode }) => {
-  const [isExtensionSupported, setIsExtensionSupported] = useState(false);
+  const [isSuggestionModalVisible, setIsSuggestionModalVisible] =
+    useState(false);
 
   const value = {
-    isExtensionSupported,
-    setIsExtensionSupported,
+    isSuggestionModalVisible,
+    setIsSuggestionModalVisible,
   };
 
   return <UIContext.Provider value={value}>{children}</UIContext.Provider>;
