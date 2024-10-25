@@ -1,4 +1,4 @@
-# Chat Message Generator Extension
+# LinkedIn Extension
 
 This repository contains a frontend-only browser extension developed as part of a job assignment for ChatGPTWriter. The extension is designed to simulate a chat interface that generates dummy messages for demonstration purposes.
 
