@@ -3,6 +3,7 @@
 This repository contains a frontend-only browser extension developed as part of a job assignment for ChatGPTWriter. The extension is designed to simulate a chat interface that generates dummy messages for demonstration purposes.
 
 ## Watch the Sample Video
+[sample.webm](https://github.com/user-attachments/assets/a8d414c2-0542-4c30-9e5c-4365744abcec)
 
 ## Table of Contents
 
