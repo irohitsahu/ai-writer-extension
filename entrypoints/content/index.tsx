@@ -8,6 +8,7 @@ import GenerationButton from "@/components/Button/GenerationButton";
 import Modal from "@/components/Modal/Modal";
 
 type UiObject = {
+  uiContainer: HTMLElement;
   mount: () => void;
   remove: () => void;
 };
@@ -48,9 +49,22 @@ function setupMessageBoxListener(ctx: ContentScriptContext) {
       messageBox.addEventListener("focusin", () =>
         handleFocus(ctx, messageBox)
       );
-      // messageBox.addEventListener("focusout", () => handleBlur());
+      document.addEventListener("click", () => handleDocumentClick());
     }
   });
+}
+
+function handleDocumentClick() {
+  const aiIconButton = ui?.uiContainer.querySelector("#linkedin-ai-icon");
+  const aiModalBody = ui?.uiContainer.querySelector(
+    "#linkedin-ai-modal .cs-modal-body"
+  );
+
+  if (aiIconButton || aiModalBody) {
+    return;
+  }
+
+  handleBlur();
 }
 
 // focusin
@@ -58,7 +72,7 @@ async function handleFocus(ctx: ContentScriptContext, messageBox: Element) {
   handleBlur();
   // creating ui for the focused message box
   ui = await createIconUi(ctx, messageBox);
-  ui.mount();
+  ui?.mount();
 }
 
 // focusout
@@ -82,7 +96,7 @@ async function createIconUi(ctx: ContentScriptContext, messageBox: Element) {
       uiContainer.appendChild(mainContainer);
       const aiIconButton = uiContainer.querySelector("#linkedin-ai-icon");
       aiIconButton?.addEventListener("click", async (event) => {
-        event.preventDefault();
+        handleBlur();
         ui = await createModalUi(ctx);
         ui?.mount();
       });
@@ -108,6 +122,7 @@ async function createModalUi(ctx: ContentScriptContext) {
     append: "last",
     onMount: (uiModalContainer) => {
       injectFonts();
+      mainContainer.setAttribute("id", "linkedin-ai-modal");
       uiModalContainer.appendChild(mainContainer);
 
       root.render(<Modal closeModal={handleBlur} />);
