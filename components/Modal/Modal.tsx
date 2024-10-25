@@ -4,6 +4,8 @@
 // 4 get the message box from dom and insert the generated value to message box
 
 import generateIcon from "@/assets/icons/generate-icon.svg";
+import regenerateIcon from "@/assets/icons/regenerate-icon.svg";
+import insertIcon from "@/assets/icons/insert-icon.svg";
 import { ChangeEvent } from "react";
 import ChatBox from "../ChatBox/ChatBox";
 
@@ -11,7 +13,7 @@ const Modal = ({ closeModal }: { closeModal: () => void }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [error, setError] = useState<boolean>(false);
-  const [isTypingComplete, setIsTypingComplete] = useState<boolean>(false);
+  const [isTypingComplete, setIsTypingComplete] = useState<boolean>(true);
 
   const handleGenerate = (): void => {
     if (inputValue === "") {
@@ -102,14 +104,24 @@ const Modal = ({ closeModal }: { closeModal: () => void }) => {
           <div className="flex justify-end items-center w-full gap-5">
             {messages.length > 0 && isTypingComplete && (
               <button className="secondary-btn" onClick={handleInsert}>
-                Insert
+                <img src={insertIcon} alt="generate-logo" className="w-5 h-5" />
+                <span>Insert</span>
               </button>
             )}
-
-            <button className="primary-btn" onClick={handleGenerate}>
-              <img src={generateIcon} alt="generate-logo" className="w-5 h-5" />
-              {showRegenerate ? <span>Regenerate</span> : <span>Generate</span>}
-            </button>
+            {isTypingComplete && (
+              <button className="primary-btn" onClick={handleGenerate}>
+                <img
+                  src={showRegenerate ? regenerateIcon : generateIcon}
+                  alt="generate-logo"
+                  className="w-5 h-5"
+                />
+                {showRegenerate ? (
+                  <span>Regenerate</span>
+                ) : (
+                  <span>Generate</span>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
