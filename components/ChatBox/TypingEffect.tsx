@@ -1,16 +1,15 @@
-interface TypingEffectProps {
-  message: string;
-}
-
-const TypingEffect = ({ message }: TypingEffectProps) => {
+const TypingEffect = ({
+  message,
+  isTypingComplete,
+  setIsTypingComplete,
+}: TypingEffectProps) => {
   const [displayedText, setDisplayedText] = useState("");
-  const [isTyping, setIsTyping] = useState(true);
 
   if (!message) return null;
 
   console.log(message);
   useEffect(() => {
-    setIsTyping(true);
+    setIsTypingComplete(false);
     setDisplayedText("");
 
     const typeMessage = async () => {
@@ -18,7 +17,7 @@ const TypingEffect = ({ message }: TypingEffectProps) => {
         await new Promise((resolve) => setTimeout(resolve, 30));
         setDisplayedText((prev) => prev + message.charAt(i));
       }
-      setIsTyping(false);
+      setIsTypingComplete(true);
     };
 
     typeMessage();
@@ -27,7 +26,7 @@ const TypingEffect = ({ message }: TypingEffectProps) => {
   return (
     <p>
       {displayedText}
-      {isTyping && <span className="typing-cursor">|</span>}
+      {!isTypingComplete && <span className="typing-cursor">|</span>}
     </p>
   );
 };

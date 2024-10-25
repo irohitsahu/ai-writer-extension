@@ -7,15 +7,11 @@ import generateIcon from "@/assets/icons/generate-icon.svg";
 import { ChangeEvent } from "react";
 import ChatBox from "../ChatBox/ChatBox";
 
-interface Message {
-  text: string;
-  type: "user" | "ai";
-}
-
 const Modal = ({ closeModal }: { closeModal: () => void }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [error, setError] = useState<boolean>(false);
+  const [isTypingComplete, setIsTypingComplete] = useState<boolean>(false);
 
   const handleGenerate = (): void => {
     if (inputValue === "") {
@@ -73,6 +69,9 @@ const Modal = ({ closeModal }: { closeModal: () => void }) => {
     }
   };
 
+  const lastMessage = messages[messages.length - 1];
+  const showRegenerate = lastMessage?.type === "ai" && lastMessage?.text;
+
   return (
     <div className="cs-modal">
       <div
@@ -80,7 +79,13 @@ const Modal = ({ closeModal }: { closeModal: () => void }) => {
         onClick={closeModal}
       />
       <div className="cs-modal-body relative w-full max-w-lg shadow-xl">
-        {messages.length !== 0 ? <ChatBox messages={messages} /> : null}
+        {messages.length !== 0 ? (
+          <ChatBox
+            messages={messages}
+            isTypingComplete={isTypingComplete}
+            setIsTypingComplete={setIsTypingComplete}
+          />
+        ) : null}
 
         <div className="input-btn-wrapper">
           <input
@@ -95,7 +100,7 @@ const Modal = ({ closeModal }: { closeModal: () => void }) => {
             onChange={handleInputChange}
           />
           <div className="flex justify-end items-center w-full gap-5">
-            {messages.length > 0 && (
+            {messages.length > 0 && isTypingComplete && (
               <button className="secondary-btn" onClick={handleInsert}>
                 Insert
               </button>
@@ -103,7 +108,7 @@ const Modal = ({ closeModal }: { closeModal: () => void }) => {
 
             <button className="primary-btn" onClick={handleGenerate}>
               <img src={generateIcon} alt="generate-logo" className="w-5 h-5" />
-              <span className="font-semibold">Generate</span>
+              {showRegenerate ? <span>Regenerate</span> : <span>Generate</span>}
             </button>
           </div>
         </div>

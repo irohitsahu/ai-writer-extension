@@ -7,13 +7,8 @@ import type { ContentScriptContext } from "wxt/client";
 import GenerationButton from "@/components/Button/GenerationButton";
 import Modal from "@/components/Modal/Modal";
 
-type UiObject = {
-  uiContainer: HTMLElement;
-  mount: () => void;
-  remove: () => void;
-};
-
-let ui: UiObject | null | undefined = null;
+let ui: UiObject = null;
+let isIconClicked = false; // Add this flag to track icon clicks
 
 export default defineContentScript({
   matches: ["https://www.linkedin.com/*"],
@@ -29,7 +24,6 @@ function setupMessageBoxObserver(ctx: ContentScriptContext) {
     setupMessageBoxListener(ctx);
   });
 
-  // observing the document body for changes
   observer.observe(document.body, {
     childList: true,
     subtree: true,
@@ -42,43 +36,34 @@ function setupMessageBoxListener(ctx: ContentScriptContext) {
   );
 
   messageBoxes.forEach((messageBox) => {
-    // avoiding multiple listeners to the same box
     if (!messageBox.hasAttribute("data-listener-attached")) {
       messageBox.setAttribute("data-listener-attached", "true");
 
-      messageBox.addEventListener("focusin", () =>
-        handleFocus(ctx, messageBox)
+      messageBox.addEventListener("focus", () => handleFocus(ctx, messageBox));
+      messageBox.addEventListener("blur", (event) =>
+        handleBlur(event as FocusEvent)
       );
-      document.addEventListener("click", () => handleDocumentClick());
     }
   });
 }
 
-function handleDocumentClick() {
-  const aiIconButton = ui?.uiContainer.querySelector("#linkedin-ai-icon");
-  const aiModalBody = ui?.uiContainer.querySelector(
-    "#linkedin-ai-modal .cs-modal-body"
-  );
-
-  if (aiIconButton || aiModalBody) {
-    return;
-  }
-
-  handleBlur();
-}
-
 // focusin
 async function handleFocus(ctx: ContentScriptContext, messageBox: Element) {
-  handleBlur();
-  // creating ui for the focused message box
   ui = await createIconUi(ctx, messageBox);
   ui?.mount();
 }
 
 // focusout
-function handleBlur() {
-  ui?.remove();
-  ui = null;
+function handleBlur(event?: FocusEvent) {
+  const relatedTarget = event?.relatedTarget as Element | null;
+
+  // checking if the click is from icon button
+  if (relatedTarget?.matches("linkedin-ai-icon[data-wxt-shadow-root]")) {
+    return;
+  } else {
+    ui?.remove();
+    ui = null;
+  }
 }
 
 // injecting IconUI
@@ -95,11 +80,12 @@ async function createIconUi(ctx: ContentScriptContext, messageBox: Element) {
       mainContainer.setAttribute("id", "linkedin-ai-icon");
       uiContainer.appendChild(mainContainer);
       const aiIconButton = uiContainer.querySelector("#linkedin-ai-icon");
-      aiIconButton?.addEventListener("click", async (event) => {
+      aiIconButton?.addEventListener("click", async () => {
         handleBlur();
         ui = await createModalUi(ctx);
-        ui?.mount();
+        ui.mount();
       });
+
       root.render(<GenerationButton />);
     },
     onRemove: () => {
