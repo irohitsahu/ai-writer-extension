@@ -38,13 +38,13 @@ To install the extension locally, follow these steps:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/yourusername/chat-message-generator.git
+   [git clone https://github.com/yourusername/chat-message-generator.git](https://github.com/irohitsahu/ai-writer-extension.git)
    ```
 
 2. Navigate to the project directory:
 
 ```bash
- cd chat-message-generator
+ cd ai-writer-extension
 ```
 
 3. Open your browser's extension management page (e.g., chrome://extensions in Chrome).
