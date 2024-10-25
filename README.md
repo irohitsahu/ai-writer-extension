@@ -4,7 +4,7 @@ This repository contains a frontend-only browser extension developed as part of 
 
 ## Watch the Sample Video
 
-(https://github.com/irohitsahu/ai-writer-extension/blob/main/assets/sample/sample.mp4)
+https://github.com/irohitsahu/ai-writer-extension/blob/main/assets/sample/sample.mp4
 
 ## Table of Contents
 
